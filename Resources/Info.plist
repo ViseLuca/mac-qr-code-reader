@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>it</string>
+	<key>CFBundleExecutable</key>
+	<string>QRReader</string>
+	<key>CFBundleIdentifier</key>
+	<string>it.lucav.qrreader</string>
+	<key>CFBundleName</key>
+	<string>QR Reader</string>
+	<key>CFBundleDisplayName</key>
+	<string>QR Reader</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>14.0</string>
+	<key>LSUIElement</key>
+	<true/>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>QR Reader usa la webcam per leggere i QR code.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>macOS richiede il permesso Posizione per vedere i nomi delle reti Wi-Fi e connettersi a quella del QR code.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>macOS richiede il permesso Posizione per vedere i nomi delle reti Wi-Fi e connettersi a quella del QR code.</string>
+</dict>
+</plist>
