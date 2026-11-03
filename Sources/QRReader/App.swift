@@ -8,7 +8,7 @@ struct QRReaderApp: App {
 
     var body: some Scene {
         MenuBarExtra("QR Reader", systemImage: "qrcode.viewfinder") {
-            MenuContent(history: AppController.shared.history)
+            MenuContent(history: AppController.shared.history, updates: AppController.shared.updates)
         }
     }
 }
@@ -21,6 +21,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
 struct MenuContent: View {
     @ObservedObject var history: History
+    @ObservedObject var updates: UpdateController
     private var controller: AppController { .shared }
 
     var body: some View {
@@ -43,6 +44,16 @@ struct MenuContent: View {
             }
         }
         Divider()
+        if let version = updates.version {
+            switch updates.state {
+            case .available(let release):
+                Button("⬆️ Aggiorna alla \(release.version)") { updates.install(release) }
+            case .installing:
+                Text("Aggiornamento in corso…")
+            case .idle:
+                Button("Controlla aggiornamenti… (\(version))") { Task { await updates.check(manual: true) } }
+            }
+        }
         Button("Esci") { NSApp.terminate(nil) }
             .keyboardShortcut("q")
     }

@@ -8,6 +8,7 @@ final class AppController {
     static let shared = AppController()
 
     let history = History()
+    let updates = UpdateController()
     private let resultPanel = ResultPanelController()
     private let regionSelector = RegionSelector()
     private var viewfinder: ViewfinderController?
@@ -24,6 +25,7 @@ final class AppController {
         HotKeyCenter.shared.register(keyCode: UInt32(kVK_ANSI_Q), modifiers: mods) { [weak self] in self?.toggleViewfinder() }
         HotKeyCenter.shared.register(keyCode: UInt32(kVK_ANSI_A), modifiers: mods) { [weak self] in self?.startRegionSelection() }
         HotKeyCenter.shared.register(keyCode: UInt32(kVK_ANSI_C), modifiers: mods) { [weak self] in self?.toggleCamera() }
+        updates.start()
     }
 
     // MARK: - Modes
