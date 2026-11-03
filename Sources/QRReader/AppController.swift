@@ -50,7 +50,7 @@ final class AppController {
 
     func toggleCamera() {
         if let camera {
-            camera.close()
+            camera.isKeyWindow ? camera.close() : camera.bringToFront()
             return
         }
         let controller = CameraWindowController()

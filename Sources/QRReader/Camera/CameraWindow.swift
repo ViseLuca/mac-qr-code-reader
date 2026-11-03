@@ -42,8 +42,19 @@ final class CameraWindowController: NSObject, NSWindowDelegate {
         preview.configureMirroring()
         scanner.start()
         window.center()
+        // Stay above other windows: the user is usually busy holding a phone up to the camera.
+        window.level = .floating
+        bringToFront()
+    }
+
+    var isKeyWindow: Bool { window.isKeyWindow }
+
+    /// Menu bar apps are not reliably activated by `NSApp.activate()` (cooperative activation,
+    /// macOS 14+), so also force the window to the front.
+    func bringToFront() {
         NSApp.activate()
         window.makeKeyAndOrderFront(nil)
+        window.orderFrontRegardless()
     }
 
     func close() {
