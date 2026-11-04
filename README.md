@@ -20,17 +20,21 @@ Le ultime 20 scansioni sono nel menu *Cronologia* (salvate in chiaro in UserDefa
 
 ## Installazione
 
-### Download (senza Xcode)
+### Con il Terminale (consigliato)
+
+Apri **Terminale** (Spotlight ⌘Spazio › "Terminale"), incolla questa riga e premi Invio:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/ViseLuca/mac-qr-code-reader/main/scripts/install.sh | bash
+```
+
+Scarica l'ultima versione, la verifica, la installa in `Applicazioni` e la apre. Nessun avviso di macOS: i file scaricati con `curl` non vengono bloccati da Gatekeeper come quelli scaricati dal browser. Rilanciala quando vuoi per reinstallare.
+
+### Dal browser
 
 1. Scarica **[QRReader.zip](https://github.com/ViseLuca/mac-qr-code-reader/releases/latest/download/QRReader.zip)** dall'[ultima release](https://github.com/ViseLuca/mac-qr-code-reader/releases/latest).
 2. Estrai lo zip e sposta `QR Reader.app` in `Applicazioni`.
-3. L'app ha una firma ad-hoc e non è notarizzata, quindi al primo avvio macOS la blocca. Sbloccala una volta con:
-
-   ```sh
-   xattr -dr com.apple.quarantine "/Applications/QR Reader.app"
-   ```
-
-   oppure prova ad aprirla, poi vai in *Impostazioni di Sistema › Privacy e sicurezza* › **Apri comunque**.
+3. L'app è gratuita e non è notarizzata da Apple, quindi al primo avvio macOS la blocca. Sbloccala una volta: prova ad aprirla, chiudi l'avviso, poi vai in *Impostazioni di Sistema › Privacy e sicurezza*, scorri in fondo e premi **Apri comunque**.
 
 Per averla sempre a portata: *Impostazioni › Generali › Elementi login* › aggiungi QR Reader.
 
@@ -46,7 +50,7 @@ scripts/build-app.sh install
 |---|---|
 | `scripts/build-app.sh` | Build universale (Apple Silicon + Intel) in `build/QR Reader.app` |
 | `scripts/build-app.sh install` | Build, copia in `/Applications` e riavvia |
-| `scripts/build-app.sh dist 0.2.0` | Build della versione 0.2.0 e zip in `build/QRReader.zip` per una release |
+| `scripts/build-app.sh dist 0.2.0` | Build della versione 0.2.0 firmata con `QRReader Dev` e zip in `build/QRReader.zip` per una release |
 | `scripts/build-app.sh icon` | Ridisegna `Resources/AppIcon.icns` da `scripts/make-icon.swift` |
 | `scripts/test.sh` | Test unitari (parser, decoder, aggiornamenti) |
 
@@ -67,6 +71,17 @@ gh release create 0.2.0 build/QRReader.zip
 
 L'asset deve chiamarsi `QRReader.zip`. Le build locali (`scripts/build-app.sh`, `install`) prendono la versione dall'ultimo tag git.
 
+`dist` firma con il certificato self-signed `QRReader Dev` (un altro con `CODESIGN_IDENTITY="…"`) e rifiuta la firma ad-hoc: con una firma sempre uguale macOS riconosce ogni versione come la stessa app e gli utenti non devono riconcedere i permessi a ogni aggiornamento.
+
+#### Certificato di firma (una volta sola)
+
+1. *Accesso Portachiavi › Assistente Certificato › Crea un certificato…*
+2. Nome `QRReader Dev`, tipo identità *Radice autofirmata*, tipo certificato *Firma del codice*, spunta **Lascia che sia io a sovrascrivere i valori predefiniti**.
+3. *Periodo di validità*: `3650` giorni (il predefinito è un anno, poi `codesign` smette di firmare). Conferma il resto con Continua.
+4. Fai un backup: in Accesso Portachiavi, *I miei certificati* › tasto destro su `QRReader Dev` › **Esporta** in `.p12`, con una password, in un posto sicuro (es. 1Password). Se il certificato va perso, con uno nuovo gli utenti dovranno riconcedere i permessi una volta.
+
+Per controllare: `codesign -d -r- "build/QR Reader.app"` deve mostrare `certificate leaf = H"…"`, non `cdhash`.
+
 ## Permessi
 
 | Permesso | Serve per | Quando viene chiesto |
@@ -75,13 +90,9 @@ L'asset deve chiamarsi `QRReader.zip`. Le build locali (`scripts/build-app.sh`, 
 | Fotocamera | Webcam | Primo utilizzo |
 | Posizione | Connessione Wi-Fi (macOS nasconde gli SSID senza questo permesso) | Primo "Connetti". Se lo neghi, l'app usa `networksetup` come alternativa. |
 
-### Permessi richiesti di nuovo a ogni build o aggiornamento
+### Permessi richiesti di nuovo a ogni build locale
 
-La firma predefinita è ad-hoc, quindi macOS considera ogni build un'app diversa. Per evitarlo, crea una volta un certificato personale:
-
-1. *Accesso Portachiavi › Assistente Certificato › Crea un certificato…*
-2. Nome `QRReader Dev`, tipo *Firma del codice*
-3. `CODESIGN_IDENTITY="QRReader Dev" scripts/build-app.sh`
+Le build locali sono firmate ad-hoc, quindi macOS considera ogni build un'app diversa. Per evitarlo usa il [certificato di firma](#certificato-di-firma-una-volta-sola): `CODESIGN_IDENTITY="QRReader Dev" scripts/build-app.sh install`.
 
 ## Struttura
 

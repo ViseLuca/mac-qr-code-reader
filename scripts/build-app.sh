@@ -6,6 +6,8 @@
 #   scripts/build-app.sh icon         redraw Resources/AppIcon.icns from scripts/make-icon.swift
 # Set CODESIGN_IDENTITY to a stable certificate name to keep TCC permissions across rebuilds
 # (default "-" = ad-hoc signature, macOS may ask for permissions again after each build).
+# dist defaults to the self-signed "QRReader Dev" certificate and refuses ad-hoc: users would have to grant
+# permissions again after every update.
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
@@ -32,7 +34,20 @@ else
 fi
 VERSION="${VERSION#v}"
 
-IDENTITY="${CODESIGN_IDENTITY:--}"
+if [[ "$MODE" == dist ]]; then
+  IDENTITY="${CODESIGN_IDENTITY:-QRReader Dev}"
+  if [[ "$IDENTITY" == - ]]; then
+    echo "A release cannot be signed ad-hoc: create the \"QRReader Dev\" certificate (see README)." >&2
+    exit 1
+  fi
+  # Not -v: a self-signed certificate is not trusted, so it is never listed as valid.
+  if [[ "$(security find-identity -p codesigning)" != *"\"$IDENTITY\""* ]]; then
+    echo "Signing certificate \"$IDENTITY\" not found in the keychain: create it or restore its backup (see README)." >&2
+    exit 1
+  fi
+else
+  IDENTITY="${CODESIGN_IDENTITY:--}"
+fi
 BUNDLE_ID="it.lucav.qrreader"
 APP="build/QR Reader.app"
 BIN="$APP/Contents/MacOS/QRReader"
