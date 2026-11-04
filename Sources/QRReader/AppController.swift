@@ -1,5 +1,4 @@
 import AppKit
-import Carbon.HIToolbox
 import QRCore
 
 /// Central coordinator: owns the scan modes and routes detections to the result panel.
@@ -9,6 +8,8 @@ final class AppController {
 
     let history = History()
     let updates = UpdateController()
+    let shortcuts = Shortcuts()
+    private lazy var shortcutsWindow = ShortcutsWindowController(shortcuts: shortcuts)
     private let resultPanel = ResultPanelController()
     private let regionSelector = RegionSelector()
     private var viewfinder: ViewfinderController?
@@ -21,10 +22,11 @@ final class AppController {
     private let repeatInterval: TimeInterval = 3
 
     func setUp() {
-        let mods = UInt32(optionKey | shiftKey)
-        HotKeyCenter.shared.register(keyCode: UInt32(kVK_ANSI_Q), modifiers: mods) { [weak self] in self?.toggleViewfinder() }
-        HotKeyCenter.shared.register(keyCode: UInt32(kVK_ANSI_A), modifiers: mods) { [weak self] in self?.startRegionSelection() }
-        HotKeyCenter.shared.register(keyCode: UInt32(kVK_ANSI_C), modifiers: mods) { [weak self] in self?.toggleCamera() }
+        shortcuts.start(handlers: [
+            .viewfinder: { [weak self] in self?.toggleViewfinder() },
+            .region: { [weak self] in self?.startRegionSelection() },
+            .camera: { [weak self] in self?.toggleCamera() },
+        ])
         updates.start()
     }
 
@@ -64,6 +66,20 @@ final class AppController {
 
     func showFromHistory(_ item: History.Item) {
         resultPanel.show(raws: [item.raw])
+    }
+
+    func showShortcuts() {
+        shortcutsWindow.show()
+    }
+
+    func showAbout() {
+        let repo = URL(string: "https://github.com/\(Updater.repo)")!
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+        let title = ["QR Reader", version].compactMap { $0 }.joined(separator: " ")
+        let info = "Lettore di QR code per la barra dei menu. Gratuito e open source.\n\n\(repo.host()!)\(repo.path())"
+        if Prompt.confirm(title, info: info, confirm: "Apri su GitHub", cancel: "Chiudi") {
+            NSWorkspace.shared.open(repo)
+        }
     }
 
     // MARK: - Detection handling

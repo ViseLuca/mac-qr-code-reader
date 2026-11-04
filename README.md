@@ -10,6 +10,8 @@ Lettore di QR code per macOS, nella barra dei menu. Nativo (Swift, Vision, Scree
 | **Seleziona area** | ⌥⇧A | Trascina un rettangolo come con ⌘⇧4. Un clic senza trascinare scansiona tutto lo schermo, Esc annulla. |
 | **Webcam** | ⌥⇧C | Finestra con anteprima live. Chiudila per spegnere la fotocamera. |
 
+Le scorciatoie si cambiano da **Scorciatoie…** nel menu: clicca quella da cambiare e premi la nuova combinazione (serve almeno ⌘, ⌥ o ⌃; F1–F12 anche da soli). ⌫ la toglie, la freccia la riporta al valore predefinito. Se un'altra app usa già la stessa combinazione, macOS la rifiuta: la finestra lo segnala e la voce di menu diventa **⚠️ Scorciatoie…**.
+
 Il risultato compare in un pannello flottante con azioni in base al contenuto:
 - **Wi-Fi** (`WIFI:T:WPA;S:…;P:…;;`): Connetti, Copia password
 - **Link**: Apri, Copia
@@ -98,7 +100,7 @@ Le build locali sono firmate ad-hoc, quindi macOS considera ogni build un'app di
 
 ```
 Sources/QRCore/      decoder (Vision), parser dei contenuti, auto-update (Update/). Niente AppKit
-Sources/QRReader/    app: menu bar, mirino, selezione area, webcam, Wi-Fi, scorciatoie, aggiornamenti
+Sources/QRReader/    app: menu bar, mirino, selezione area, webcam, Wi-Fi, scorciatoie (Shortcuts/), aggiornamenti
 Tests/QRCoreTests/   swift-testing
 scripts/             build del .app, icona, test
 ```

@@ -7,18 +7,29 @@ final class HotKeyCenter {
 
     private var handlers: [UInt32: @MainActor () -> Void] = [:]
     private var refs: [EventHotKeyRef] = []
+    private var nextID: UInt32 = 1
     private var installed = false
     private let signature: OSType = 0x5152_5244 // 'QRRD'
 
-    func register(keyCode: UInt32, modifiers: UInt32, handler: @escaping @MainActor () -> Void) {
+    /// False if macOS refuses the combination, usually because another app has already registered it.
+    @discardableResult
+    func register(keyCode: UInt32, modifiers: UInt32, handler: @escaping @MainActor () -> Void) -> Bool {
         installHandlerIfNeeded()
-        let id = UInt32(handlers.count + 1)
+        let id = nextID
+        nextID += 1
         var ref: EventHotKeyRef?
         let status = RegisterEventHotKey(keyCode, modifiers, EventHotKeyID(signature: signature, id: id),
                                          GetApplicationEventTarget(), 0, &ref)
-        guard status == noErr, let ref else { return }
+        guard status == noErr, let ref else { return false }
         handlers[id] = handler
         refs.append(ref)
+        return true
+    }
+
+    func unregisterAll() {
+        refs.forEach { UnregisterEventHotKey($0) }
+        refs = []
+        handlers = [:]
     }
 
     fileprivate func fire(id: UInt32) {

@@ -8,7 +8,8 @@ struct QRReaderApp: App {
 
     var body: some Scene {
         MenuBarExtra("QR Reader", systemImage: "qrcode.viewfinder") {
-            MenuContent(history: AppController.shared.history, updates: AppController.shared.updates)
+            MenuContent(history: AppController.shared.history, updates: AppController.shared.updates,
+                        shortcuts: AppController.shared.shortcuts)
         }
     }
 }
@@ -22,15 +23,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 struct MenuContent: View {
     @ObservedObject var history: History
     @ObservedObject var updates: UpdateController
+    @ObservedObject var shortcuts: Shortcuts
     private var controller: AppController { .shared }
 
     var body: some View {
         Button("Mirino sullo schermo") { controller.toggleViewfinder() }
-            .keyboardShortcut("q", modifiers: [.option, .shift])
+            .keyboardShortcut(shortcuts.assigned[.viewfinder]?.keyboardShortcut)
         Button("Seleziona area…") { controller.startRegionSelection() }
-            .keyboardShortcut("a", modifiers: [.option, .shift])
+            .keyboardShortcut(shortcuts.assigned[.region]?.keyboardShortcut)
         Button("Webcam") { controller.toggleCamera() }
-            .keyboardShortcut("c", modifiers: [.option, .shift])
+            .keyboardShortcut(shortcuts.assigned[.camera]?.keyboardShortcut)
         Divider()
         Menu("Cronologia") {
             if history.items.isEmpty {
@@ -54,6 +56,9 @@ struct MenuContent: View {
                 Button("Controlla aggiornamenti… (\(version))") { Task { await updates.check(manual: true) } }
             }
         }
+        Button(shortcuts.unavailable.isEmpty ? "Scorciatoie…" : "⚠️ Scorciatoie…") { controller.showShortcuts() }
+            .keyboardShortcut(",")
+        Button("Informazioni su QR Reader") { controller.showAbout() }
         Button("Esci") { NSApp.terminate(nil) }
             .keyboardShortcut("q")
     }

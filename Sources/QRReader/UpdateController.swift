@@ -101,12 +101,12 @@ enum Prompt {
         alert.runModal()
     }
 
-    @MainActor static func confirm(_ title: String, info: String, confirm: String) -> Bool {
+    @MainActor static func confirm(_ title: String, info: String, confirm: String, cancel: String = "Annulla") -> Bool {
         let alert = NSAlert()
         alert.messageText = title
         alert.informativeText = info
         alert.addButton(withTitle: confirm)
-        alert.addButton(withTitle: "Annulla")
+        alert.addButton(withTitle: cancel)
         NSApp.activate()
         return alert.runModal() == .alertFirstButtonReturn
     }
