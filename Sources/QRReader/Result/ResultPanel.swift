@@ -115,10 +115,10 @@ struct PayloadCard: View {
 
     private func wifiCard(_ wifi: WifiCredentials) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Label("Rete Wi-Fi", systemImage: "wifi").font(.headline)
+            Label("Wi-Fi Network", systemImage: "wifi").font(.headline)
             Grid(alignment: .leading, horizontalSpacing: 10, verticalSpacing: 4) {
                 GridRow {
-                    Text("Rete").foregroundStyle(.secondary)
+                    Text("Network").foregroundStyle(.secondary)
                     Text(wifi.ssid).textSelection(.enabled)
                 }
                 GridRow {
@@ -126,16 +126,16 @@ struct PayloadCard: View {
                     Text(wifi.password ?? "—").font(.body.monospaced()).textSelection(.enabled)
                 }
                 GridRow {
-                    Text("Sicurezza").foregroundStyle(.secondary)
-                    Text(wifi.security.displayName + (wifi.hidden ? " · nascosta" : ""))
+                    Text("Security").foregroundStyle(.secondary)
+                    Text(wifi.security.displayName + (wifi.hidden ? " · " + String(localized: "hidden", comment: "Wi-Fi network") : ""))
                 }
             }
             HStack {
-                Button("Connetti", action: onConnect)
+                Button("Connect", action: onConnect)
                     .keyboardShortcut(.defaultAction)
                     .disabled(status == .connecting || status == .connected)
                 if let password = wifi.password {
-                    Button("Copia password") { Clipboard.copy(password) }
+                    Button("Copy Password") { Clipboard.copy(password) }
                 }
                 Spacer()
                 statusView
@@ -143,8 +143,8 @@ struct PayloadCard: View {
             if case .failed(let reason) = status {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(reason).font(.caption).foregroundStyle(.red).fixedSize(horizontal: false, vertical: true)
-                    Text(wifi.password == nil ? "" : "Password copiata negli appunti.").font(.caption).foregroundStyle(.secondary)
-                    Button("Apri Impostazioni Wi-Fi") {
+                    Text(wifi.password == nil ? "" : LocalizedStringKey("Password copied to the clipboard.")).font(.caption).foregroundStyle(.secondary)
+                    Button("Open Wi-Fi Settings") {
                         NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.wifi-settings-extension")!)
                     }
                     .buttonStyle(.link)
@@ -158,8 +158,8 @@ struct PayloadCard: View {
         switch status {
         case .idle: EmptyView()
         case .connecting: ProgressView().controlSize(.small)
-        case .connected: Label("Connesso", systemImage: "checkmark.circle.fill").foregroundStyle(.green)
-        case .failed: Label("Errore", systemImage: "xmark.octagon.fill").foregroundStyle(.red)
+        case .connected: Label("Connected", systemImage: "checkmark.circle.fill").foregroundStyle(.green)
+        case .failed: Label("Error", systemImage: "xmark.octagon.fill").foregroundStyle(.red)
         }
     }
 
@@ -168,8 +168,8 @@ struct PayloadCard: View {
             Label("Link", systemImage: "link").font(.headline)
             Text(url.absoluteString).textSelection(.enabled).lineLimit(4)
             HStack {
-                Button("Apri") { NSWorkspace.shared.open(url) }.keyboardShortcut(.defaultAction)
-                Button("Copia") { Clipboard.copy(url.absoluteString) }
+                Button("Open") { NSWorkspace.shared.open(url) }.keyboardShortcut(.defaultAction)
+                Button("Copy") { Clipboard.copy(url.absoluteString) }
             }
         }
     }
@@ -178,26 +178,26 @@ struct PayloadCard: View {
         VStack(alignment: .leading, spacing: 10) {
             Label(payload.summary, systemImage: "person.crop.circle").font(.headline)
             HStack {
-                Button("Aggiungi ai Contatti") { Self.openVCard(vcard) }.keyboardShortcut(.defaultAction)
-                Button("Copia") { Clipboard.copy(vcard) }
+                Button("Add to Contacts") { Self.openVCard(vcard) }.keyboardShortcut(.defaultAction)
+                Button("Copy") { Clipboard.copy(vcard) }
             }
         }
     }
 
     private func textCard(_ text: String) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Label("Testo", systemImage: "text.alignleft").font(.headline)
+            Label("Text", systemImage: "text.alignleft").font(.headline)
             ScrollView {
                 Text(text).textSelection(.enabled).frame(maxWidth: .infinity, alignment: .leading)
             }
             .frame(maxHeight: 200)
             .fixedSize(horizontal: false, vertical: true)
-            Button("Copia") { Clipboard.copy(text) }.keyboardShortcut(.defaultAction)
+            Button("Copy") { Clipboard.copy(text) }.keyboardShortcut(.defaultAction)
         }
     }
 
     private static func openVCard(_ vcard: String) {
-        let url = FileManager.default.temporaryDirectory.appendingPathComponent("Contatto QR.vcf")
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent(String(localized: "QR Contact") + ".vcf")
         do {
             try vcard.write(to: url, atomically: true, encoding: .utf8)
             NSWorkspace.shared.open(url)

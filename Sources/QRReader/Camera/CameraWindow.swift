@@ -17,7 +17,7 @@ final class CameraWindowController: NSObject, NSWindowDelegate {
                           backing: .buffered, defer: false)
         preview = CameraPreviewView(session: scanner.session)
         super.init()
-        window.title = "Webcam QR"
+        window.title = String(localized: "QR Webcam")
         window.isReleasedWhenClosed = false
         window.contentMinSize = NSSize(width: 320, height: 240)
         window.contentView = preview
@@ -69,9 +69,9 @@ final class CameraWindowController: NSObject, NSWindowDelegate {
     private func fail(_ error: Error, settingsPane: String?) {
         onClose?()
         let alert = NSAlert()
-        alert.messageText = "Webcam non disponibile"
+        alert.messageText = String(localized: "Webcam unavailable")
         alert.informativeText = error.localizedDescription
-        if settingsPane != nil { alert.addButton(withTitle: "Apri Impostazioni") }
+        if settingsPane != nil { alert.addButton(withTitle: String(localized: "Open Settings")) }
         alert.addButton(withTitle: "OK")
         NSApp.activate()
         if alert.runModal() == .alertFirstButtonReturn, let settingsPane {
@@ -82,7 +82,7 @@ final class CameraWindowController: NSObject, NSWindowDelegate {
 
 final class CameraPreviewView: NSView {
     private let previewLayer: AVCaptureVideoPreviewLayer
-    private let hint = NSTextField(labelWithString: "Inquadra un QR code")
+    private let hint = NSTextField(labelWithString: String(localized: "Point the camera at a QR code"))
 
     init(session: AVCaptureSession) {
         previewLayer = AVCaptureVideoPreviewLayer(session: session)

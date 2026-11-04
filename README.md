@@ -2,17 +2,17 @@
 
 QR code reader for the macOS menu bar. Native (Swift, Vision, ScreenCaptureKit, AVFoundation, CoreWLAN), no dependencies.
 
-The app's interface is in Italian: menu labels are quoted below as they appear, with a translation.
+The app follows the system language: Italian on a Mac set to Italian, English otherwise.
 
 ## Modes
 
 | Mode | Shortcut | What it does |
 |---|---|---|
-| **Screen viewfinder** (*Mirino sullo schermo*) | ⌥⇧Q | Floating frame that keeps scanning whatever is under it. Drag the border to move it, a corner to resize it, ✕ to close it. Clicks pass through the inside. |
-| **Select area** (*Seleziona area*) | ⌥⇧A | Drag a rectangle as with ⌘⇧4. A click without dragging scans the whole screen, Esc cancels. |
+| **Screen Viewfinder** | ⌥⇧Q | Floating frame that keeps scanning whatever is under it. Drag the border to move it, a corner to resize it, ✕ to close it. Clicks pass through the inside. |
+| **Select Area** | ⌥⇧A | Drag a rectangle as with ⌘⇧4. A click without dragging scans the whole screen, Esc cancels. |
 | **Webcam** | ⌥⇧C | Window with a live preview. Close it to turn the camera off. |
 
-Shortcuts can be changed from **Scorciatoie…** (Shortcuts…) in the menu: click the one to change and press the new combination (it needs at least ⌘, ⌥ or ⌃; F1–F12 also work on their own). ⌫ removes it, the arrow resets it to the default. If another app already uses the same combination, macOS refuses it: the window says so and the menu item becomes **⚠️ Scorciatoie…**.
+Shortcuts can be changed from **Shortcuts…** in the menu: click the one to change and press the new combination (it needs at least ⌘, ⌥ or ⌃; F1–F12 also work on their own). ⌫ removes it, the arrow resets it to the default. If another app already uses the same combination, macOS refuses it: the window says so and the menu item becomes **⚠️ Shortcuts…**.
 
 The result appears in a floating panel with actions based on the content:
 - **Wi-Fi** (`WIFI:T:WPA;S:…;P:…;;`): Connect, Copy password
@@ -20,7 +20,7 @@ The result appears in a floating panel with actions based on the content:
 - **vCard**: Add to Contacts
 - **Text**: Copy
 
-The last 20 scans are in the *Cronologia* (History) menu, stored in plain text in UserDefaults, Wi-Fi passwords included.
+The last 20 scans are in the *History* menu, stored in plain text in UserDefaults, Wi-Fi passwords included.
 
 ## Installation
 
@@ -57,6 +57,7 @@ scripts/build-app.sh install
 | `scripts/build-app.sh dist 0.2.0` | Build version 0.2.0 signed with `QRReader Dev` and zip it into `build/QRReader.zip` for a release |
 | `scripts/build-app.sh icon` | Redraw `Resources/AppIcon.icns` from `scripts/make-icon.swift` |
 | `scripts/test.sh` | Unit tests (parser, decoder, updates) |
+| `scripts/check-strings.sh` | Checks that every text in the app has an Italian translation |
 
 > Always use the `.app`, not `swift run`: without an Info.plist macOS kills the app as soon as it accesses the camera.
 
@@ -64,7 +65,7 @@ scripts/build-app.sh install
 
 At launch and every 6 hours QR Reader checks the [latest release](https://github.com/ViseLuca/mac-qr-code-reader/releases/latest) on GitHub. If it is newer than the installed version, it offers to install it: it downloads `QRReader.zip`, verifies it against the SHA-256 published by GitHub, checks that it contains QR Reader at the release's version with a valid signature, replaces the app and relaunches it. If the app is in a folder it cannot write to, it opens the release page instead.
 
-From the menu: **Controlla aggiornamenti…** (Check for updates…), which becomes **⬆️ Aggiorna alla x.y.z** (Update to x.y.z) when one is available.
+From the menu: **Check for Updates…**, which becomes **⬆️ Update to x.y.z** when one is available.
 
 ### Publishing a release
 
@@ -98,11 +99,16 @@ To check: `codesign -d -r- "build/QR Reader.app"` must show `certificate leaf = 
 
 Local builds are signed ad-hoc, so macOS treats each build as a different app. To avoid this, use the [signing certificate](#signing-certificate-one-time-only): `CODESIGN_IDENTITY="QRReader Dev" scripts/build-app.sh install`.
 
+## Translations
+
+Texts are written in English in the code (`String(localized:)`, SwiftUI literals) and translated in `Resources/it.lproj/Localizable.strings`; permission prompts in `Resources/it.lproj/InfoPlist.strings`. After adding or changing a text, update the Italian file and run `scripts/check-strings.sh`: it lists missing and unused translations.
+
 ## Structure
 
 ```
 Sources/QRCore/      decoder (Vision), content parser, auto-update (Update/). No AppKit
 Sources/QRReader/    app: menu bar, viewfinder, area selection, webcam, Wi-Fi, shortcuts (Shortcuts/), updates
+Resources/           Info.plist, icon, translations (it.lproj)
 Tests/QRCoreTests/   swift-testing
-scripts/             .app build, icon, tests
+scripts/             .app build, icon, tests, translation check
 ```

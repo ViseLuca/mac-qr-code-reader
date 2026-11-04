@@ -27,39 +27,39 @@ struct MenuContent: View {
     private var controller: AppController { .shared }
 
     var body: some View {
-        Button("Mirino sullo schermo") { controller.toggleViewfinder() }
+        Button("Screen Viewfinder") { controller.toggleViewfinder() }
             .keyboardShortcut(shortcuts.assigned[.viewfinder]?.keyboardShortcut)
-        Button("Seleziona area…") { controller.startRegionSelection() }
+        Button("Select Area…") { controller.startRegionSelection() }
             .keyboardShortcut(shortcuts.assigned[.region]?.keyboardShortcut)
         Button("Webcam") { controller.toggleCamera() }
             .keyboardShortcut(shortcuts.assigned[.camera]?.keyboardShortcut)
         Divider()
-        Menu("Cronologia") {
+        Menu("History") {
             if history.items.isEmpty {
-                Text("Nessuna scansione")
+                Text("No scans")
             } else {
                 ForEach(history.items) { item in
                     Button(QRPayload.parse(item.raw).summary) { controller.showFromHistory(item) }
                 }
                 Divider()
-                Button("Cancella cronologia") { history.clear() }
+                Button("Clear History") { history.clear() }
             }
         }
         Divider()
         if let version = updates.version {
             switch updates.state {
             case .available(let release):
-                Button("⬆️ Aggiorna alla \(release.version)") { updates.install(release) }
+                Button("⬆️ Update to \(release.version.description)") { updates.install(release) }
             case .installing:
-                Text("Aggiornamento in corso…")
+                Text("Updating…")
             case .idle:
-                Button("Controlla aggiornamenti… (\(version))") { Task { await updates.check(manual: true) } }
+                Button("Check for Updates… (\(version))") { Task { await updates.check(manual: true) } }
             }
         }
-        Button(shortcuts.unavailable.isEmpty ? "Scorciatoie…" : "⚠️ Scorciatoie…") { controller.showShortcuts() }
+        Button(shortcuts.unavailable.isEmpty ? LocalizedStringKey("Shortcuts…") : LocalizedStringKey("⚠️ Shortcuts…")) { controller.showShortcuts() }
             .keyboardShortcut(",")
-        Button("Informazioni su QR Reader") { controller.showAbout() }
-        Button("Esci") { NSApp.terminate(nil) }
+        Button("About QR Reader") { controller.showAbout() }
+        Button("Quit") { NSApp.terminate(nil) }
             .keyboardShortcut("q")
     }
 }

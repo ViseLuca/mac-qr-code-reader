@@ -9,8 +9,8 @@ enum WifiJoinError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .noInterface: "Nessuna interfaccia Wi-Fi trovata."
-        case .failed(let reason): "Connessione non riuscita: \(reason)"
+        case .noInterface: String(localized: "No Wi-Fi interface found.")
+        case .failed(let reason): String(localized: "Connection failed: \(reason)")
         }
     }
 }
@@ -56,7 +56,7 @@ enum WifiJoiner {
 
         let failureMarkers = ["error", "could not", "failed", "unable"]
         if process.terminationStatus != 0 || failureMarkers.contains(where: output.lowercased().contains) {
-            throw WifiJoinError.failed(output.isEmpty ? (previousError?.localizedDescription ?? "errore sconosciuto") : output)
+            throw WifiJoinError.failed(output.isEmpty ? (previousError?.localizedDescription ?? String(localized: "unknown error")) : output)
         }
     }
 }

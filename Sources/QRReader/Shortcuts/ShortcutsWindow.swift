@@ -18,7 +18,7 @@ final class ShortcutsWindowController: NSObject, NSWindowDelegate {
         if window == nil {
             let window = NSWindow(contentViewController: NSHostingController(
                 rootView: ShortcutsView(shortcuts: shortcuts, recorder: recorder)))
-            window.title = "Scorciatoie"
+            window.title = String(localized: "Shortcuts")
             window.styleMask = [.titled, .closable]
             window.isReleasedWhenClosed = false
             window.delegate = self
@@ -107,13 +107,13 @@ struct ShortcutsView: View {
                             Image(systemName: "arrow.counterclockwise")
                         }
                         .buttonStyle(.borderless)
-                        .help("Ripristina \(action.defaultShortcut.display)")
+                        .help("Reset to \(action.defaultShortcut.display)")
                         .disabled(shortcuts.assigned[action] == action.defaultShortcut)
                     }
                     if shortcuts.unavailable.contains(action) {
                         GridRow {
                             Color.clear.gridCellUnsizedAxes([.horizontal, .vertical])
-                            Text("Già usata da un'altra app: scegline un'altra.")
+                            Text("Already used by another app: choose a different one.")
                                 .font(.caption)
                                 .foregroundStyle(.red)
                                 .gridCellColumns(2)
@@ -121,7 +121,7 @@ struct ShortcutsView: View {
                     }
                 }
             }
-            Text("Clicca una scorciatoia e premi la nuova combinazione, con almeno ⌘, ⌥ o ⌃ (i tasti F1–F12 anche da soli). Esc annulla, ⌫ la toglie.")
+            Text("Click a shortcut and press the new combination, with at least ⌘, ⌥ or ⌃ (F1–F12 also work on their own). Esc cancels, ⌫ removes it.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -132,8 +132,8 @@ struct ShortcutsView: View {
 
     private func label(for action: ShortcutAction) -> String {
         if recorder.action == action {
-            return recorder.rejected ? "Aggiungi ⌘, ⌥ o ⌃" : "Premi i tasti…"
+            return recorder.rejected ? String(localized: "Add ⌘, ⌥ or ⌃") : String(localized: "Press keys…")
         }
-        return shortcuts.assigned[action]?.display ?? "Nessuna"
+        return shortcuts.assigned[action]?.display ?? String(localized: "None", comment: "No shortcut assigned")
     }
 }

@@ -1,0 +1,3 @@
+"NSCameraUsageDescription" = "QR Reader usa la webcam per leggere i QR code.";
+"NSLocationWhenInUseUsageDescription" = "macOS richiede il permesso Posizione per vedere i nomi delle reti Wi-Fi e connettersi a quella del QR code.";
+"NSLocationUsageDescription" = "macOS richiede il permesso Posizione per vedere i nomi delle reti Wi-Fi e connettersi a quella del QR code.";

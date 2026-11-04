@@ -161,7 +161,7 @@ final class ViewfinderView: NSView {
             .font: NSFont.systemFont(ofSize: 11, weight: .semibold),
             .foregroundColor: NSColor.white,
         ]
-        let title = (found ? "QR trovato" : "Mirino QR") as NSString
+        let title = (found ? String(localized: "QR found") : String(localized: "QR Viewfinder")) as NSString
         title.draw(at: NSPoint(x: Self.band + 2, y: bounds.maxY - Self.topBar + 6), withAttributes: attrs)
 
         let close = "✕" as NSString

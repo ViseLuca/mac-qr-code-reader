@@ -69,6 +69,10 @@ lipo -create \
 
 cp -f Resources/Info.plist "$APP/Contents/Info.plist"
 cp -f Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
+# Translations: macOS picks the one matching the system language, English otherwise.
+for LPROJ in Resources/*.lproj; do
+  ditto "$LPROJ" "$APP/Contents/Resources/$(basename "$LPROJ")"
+done
 /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $VERSION" -c "Set :CFBundleVersion $VERSION" "$APP/Contents/Info.plist"
 
 codesign --force --sign "$IDENTITY" --identifier "$BUNDLE_ID" "$APP"

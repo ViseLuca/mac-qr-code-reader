@@ -1,0 +1,2 @@
+/* English is the source language: the keys in it.lproj are the English texts in the code.
+   This file only declares the English localization, so macOS can pick it. */

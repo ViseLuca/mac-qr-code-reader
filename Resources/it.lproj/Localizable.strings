@@ -1,0 +1,100 @@
+/* Italian translation. Keys are the English texts in the source code.
+   Check that every key is translated with: scripts/check-strings.sh */
+
+/* Menu */
+"Screen Viewfinder" = "Mirino sullo schermo";
+"Select Area…" = "Seleziona area…";
+"Select Area" = "Seleziona area";
+"Webcam" = "Webcam";
+"History" = "Cronologia";
+"No scans" = "Nessuna scansione";
+"Clear History" = "Cancella cronologia";
+"⬆️ Update to %@" = "⬆️ Aggiorna alla %@";
+"Updating…" = "Aggiornamento in corso…";
+"Check for Updates… (%@)" = "Controlla aggiornamenti… (%@)";
+"Shortcuts…" = "Scorciatoie…";
+"⚠️ Shortcuts…" = "⚠️ Scorciatoie…";
+"About QR Reader" = "Informazioni su QR Reader";
+"Quit" = "Esci";
+"QR Reader" = "QR Reader";
+
+/* About */
+"QR code reader for the menu bar. Free and open source." = "Lettore di QR code per la barra dei menu. Gratuito e open source.";
+"Open on GitHub" = "Apri su GitHub";
+"Close" = "Chiudi";
+
+/* Screen */
+"Cannot capture the screen" = "Impossibile catturare lo schermo";
+"Grant the permission in System Settings › Privacy & Security › Screen & System Audio Recording, then relaunch QR Reader." = "Concedi il permesso in Impostazioni di Sistema › Privacy e sicurezza › Registrazione schermo e audio di sistema, poi riavvia QR Reader.";
+"Open Settings" = "Apri Impostazioni";
+"Cancel" = "Annulla";
+"No QR code found in the selected area." = "Nessun QR trovato nell'area selezionata.";
+"The selected area is not on any screen." = "L'area selezionata non è su nessuno schermo.";
+"Screen not available for capture." = "Schermo non disponibile per la cattura.";
+"Drag to select a QR code · click for the whole screen · Esc to cancel" = "Trascina per selezionare un QR · clic per tutto lo schermo · Esc per annullare";
+"QR found" = "QR trovato";
+"QR Viewfinder" = "Mirino QR";
+
+/* Webcam */
+"Camera access denied." = "Accesso alla fotocamera negato.";
+"No camera available." = "Nessuna fotocamera disponibile.";
+"QR Webcam" = "Webcam QR";
+"Webcam unavailable" = "Webcam non disponibile";
+"Point the camera at a QR code" = "Inquadra un QR code";
+
+/* Result */
+"Wi-Fi Network" = "Rete Wi-Fi";
+"Network" = "Rete";
+"Password" = "Password";
+"Security" = "Sicurezza";
+"None" = "Nessuna";
+"hidden" = "nascosta";
+"Connect" = "Connetti";
+"Copy Password" = "Copia password";
+"Connected" = "Connesso";
+"Error" = "Errore";
+"Password copied to the clipboard." = "Password copiata negli appunti.";
+"Open Wi-Fi Settings" = "Apri Impostazioni Wi-Fi";
+"Link" = "Link";
+"Open" = "Apri";
+"Copy" = "Copia";
+"Add to Contacts" = "Aggiungi ai Contatti";
+"Contact: %@" = "Contatto: %@";
+"no name" = "senza nome";
+"QR Contact" = "Contatto QR";
+"Text" = "Testo";
+"No Wi-Fi interface found." = "Nessuna interfaccia Wi-Fi trovata.";
+"Connection failed: %@" = "Connessione non riuscita: %@";
+"unknown error" = "errore sconosciuto";
+
+/* Shortcuts */
+"Shortcuts" = "Scorciatoie";
+"Space" = "Spazio";
+"Click a shortcut and press the new combination, with at least ⌘, ⌥ or ⌃ (F1–F12 also work on their own). Esc cancels, ⌫ removes it." = "Clicca una scorciatoia e premi la nuova combinazione, con almeno ⌘, ⌥ o ⌃ (i tasti F1–F12 anche da soli). Esc annulla, ⌫ la toglie.";
+"Reset to %@" = "Ripristina %@";
+"Add ⌘, ⌥ or ⌃" = "Aggiungi ⌘, ⌥ o ⌃";
+"Press keys…" = "Premi i tasti…";
+"Already used by another app: choose a different one." = "Già usata da un'altra app: scegline un'altra.";
+
+/* Updates */
+"QR Reader %@ is available" = "È disponibile QR Reader %@";
+"You have %@. The update downloads from GitHub and the app relaunches by itself. Afterwards macOS may ask again for the Camera and Screen Recording permissions." = "Hai la %@. L'aggiornamento si scarica da GitHub e l'app si riavvia da sola. Dopo, macOS potrebbe chiedere di nuovo i permessi Fotocamera e Registrazione schermo.";
+"Update Now" = "Aggiorna ora";
+"QR Reader is up to date" = "QR Reader è aggiornato";
+"You have the latest version (%@)." = "Hai l'ultima versione (%@).";
+"Update check failed" = "Controllo aggiornamenti non riuscito";
+"QR Reader cannot update itself" = "QR Reader non può aggiornarsi da solo";
+"It is not allowed to replace itself in its folder. Download %@ from the release page that opens and replace the app." = "Non ha i permessi per sostituirsi nella sua cartella. Scarica %@ dalla pagina della release che si apre e sostituisci l'app.";
+"Update failed" = "Aggiornamento non riuscito";
+"Open Release" = "Apri la release";
+"Update installed" = "Aggiornamento installato";
+"Reopen QR Reader to use the new version." = "Riapri QR Reader per usare la nuova versione.";
+"No release published on GitHub" = "Nessuna release pubblicata su GitHub";
+"GitHub responded %lld" = "GitHub ha risposto %lld";
+"Corrupted download: checksum mismatch" = "Download corrotto: checksum diverso";
+"Release %@ contains app version %@" = "La release %@ contiene l'app versione %@";
+"The release zip contains another app: %@" = "Lo zip della release contiene un'altra app: %@";
+"The release zip does not contain the app" = "Lo zip della release non contiene l'app";
+"Release %@ does not contain %@" = "La release %@ non contiene %@";
+"Invalid release version: %@" = "Versione della release non valida: %@";
+"%@ failed: %@" = "%@ non riuscito: %@";

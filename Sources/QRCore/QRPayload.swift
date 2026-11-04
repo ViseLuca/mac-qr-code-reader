@@ -20,7 +20,7 @@ public enum WifiSecurity: Hashable, Sendable {
         switch self {
         case .wpa: "WPA/WPA2/WPA3"
         case .wep: "WEP"
-        case .open: "Aperta"
+        case .open: String(localized: "None", comment: "Wi-Fi security of a network without a password")
         case .other(let value): value
         }
     }
@@ -67,7 +67,7 @@ public enum QRPayload: Hashable, Sendable {
         switch self {
         case .wifi(let wifi): return "Wi-Fi: \(wifi.ssid)"
         case .url(let url): return url.absoluteString.truncated(to: 50)
-        case .contact(let vcard): return "Contatto: \(Self.vcardName(vcard) ?? "senza nome")"
+        case .contact(let vcard): return String(localized: "Contact: \(Self.vcardName(vcard) ?? String(localized: "no name"))")
         case .text(let text): return text.replacingOccurrences(of: "\n", with: " ").truncated(to: 50)
         }
     }

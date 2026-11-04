@@ -61,7 +61,7 @@ struct Shortcut: Codable, Equatable, Sendable {
 
     private var keyName: String {
         if let number = Self.functionKeys[keyCode] { return "F\(number)" }
-        if keyCode == UInt32(kVK_Space) { return "Spazio" }
+        if keyCode == UInt32(kVK_Space) { return String(localized: "Space", comment: "Space bar") }
         return Self.layoutCharacter(keyCode)?.uppercased() ?? "#\(keyCode)"
     }
 
@@ -101,9 +101,9 @@ enum ShortcutAction: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .viewfinder: "Mirino sullo schermo"
-        case .region: "Seleziona area"
-        case .camera: "Webcam"
+        case .viewfinder: String(localized: "Screen Viewfinder")
+        case .region: String(localized: "Select Area")
+        case .camera: String(localized: "Webcam")
         }
     }
 

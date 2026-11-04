@@ -7,8 +7,8 @@ enum ScreenCaptureError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .noScreen: "L'area selezionata non è su nessuno schermo."
-        case .noDisplay: "Schermo non disponibile per la cattura."
+        case .noScreen: String(localized: "The selected area is not on any screen.")
+        case .noDisplay: String(localized: "Screen not available for capture.")
         }
     }
 }

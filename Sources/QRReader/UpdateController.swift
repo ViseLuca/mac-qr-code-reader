@@ -44,23 +44,23 @@ final class UpdateController: ObservableObject {
             state = .available(release)
             guard manual || (offered != release.version && NSApp.modalWindow == nil) else { return }
             offered = release.version
-            if Prompt.confirm("È disponibile QR Reader \(release.version)",
-                              info: "Hai la \(version ?? "?"). L'aggiornamento si scarica da GitHub e l'app si riavvia da sola. Dopo, macOS potrebbe chiedere di nuovo i permessi Fotocamera e Registrazione schermo.",
-                              confirm: "Aggiorna ora") {
+            if Prompt.confirm(String(localized: "QR Reader \(release.version.description) is available"),
+                              info: String(localized: "You have \(version ?? "?"). The update downloads from GitHub and the app relaunches by itself. Afterwards macOS may ask again for the Camera and Screen Recording permissions."),
+                              confirm: String(localized: "Update Now")) {
                 install(release)
             }
         case .success(nil):
             state = .idle
-            if manual { Prompt.message("QR Reader è aggiornato", info: "Hai l'ultima versione (\(version ?? "?")).") }
+            if manual { Prompt.message(String(localized: "QR Reader is up to date"), info: String(localized: "You have the latest version (\(version ?? "?")).")) }
         case .failure(let error):
-            if manual { Prompt.message("Controllo aggiornamenti non riuscito", info: error.localizedDescription) }
+            if manual { Prompt.message(String(localized: "Update check failed"), info: error.localizedDescription) }
         }
     }
 
     func install(_ release: Release) {
         guard updater.canInstall else {
-            Prompt.message("QR Reader non può aggiornarsi da solo",
-                           info: "Non ha i permessi per sostituirsi nella sua cartella. Scarica \(Updater.assetName) dalla pagina della release che si apre e sostituisci l'app.")
+            Prompt.message(String(localized: "QR Reader cannot update itself"),
+                           info: String(localized: "It is not allowed to replace itself in its folder. Download \(Updater.assetName) from the release page that opens and replace the app."))
             NSWorkspace.shared.open(release.page)
             return
         }
@@ -72,7 +72,7 @@ final class UpdateController: ObservableObject {
                 Self.relaunch(updater.appURL)
             } catch {
                 state = .available(release)
-                if Prompt.confirm("Aggiornamento non riuscito", info: error.localizedDescription, confirm: "Apri la release") {
+                if Prompt.confirm(String(localized: "Update failed"), info: error.localizedDescription, confirm: String(localized: "Open Release")) {
                     NSWorkspace.shared.open(release.page)
                 }
             }
@@ -86,7 +86,7 @@ final class UpdateController: ObservableObject {
         reopen.arguments = ["-c", #"while kill -0 "$1" 2>/dev/null; do sleep 0.2; done; open "$2""#,
                             "sh", String(ProcessInfo.processInfo.processIdentifier), app.path]
         if (try? reopen.run()) == nil {
-            Prompt.message("Aggiornamento installato", info: "Riapri QR Reader per usare la nuova versione.")
+            Prompt.message(String(localized: "Update installed"), info: String(localized: "Reopen QR Reader to use the new version."))
         }
         NSApp.terminate(nil)
     }
@@ -101,7 +101,7 @@ enum Prompt {
         alert.runModal()
     }
 
-    @MainActor static func confirm(_ title: String, info: String, confirm: String, cancel: String = "Annulla") -> Bool {
+    @MainActor static func confirm(_ title: String, info: String, confirm: String, cancel: String = String(localized: "Cancel")) -> Bool {
         let alert = NSAlert()
         alert.messageText = title
         alert.informativeText = info

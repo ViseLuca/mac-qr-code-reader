@@ -70,7 +70,7 @@ import Testing
         let vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:Mario Rossi\nTEL:123\nEND:VCARD"
         let payload = QRPayload.parse(vcard)
         #expect(payload == .contact(vcard))
-        #expect(payload.summary == "Contatto: Mario Rossi")
+        #expect(payload.summary == "Contact: Mario Rossi")
     }
 
     @Test func summaries() {

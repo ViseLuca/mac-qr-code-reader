@@ -7,8 +7,8 @@ enum CameraError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .denied: "Accesso alla fotocamera negato."
-        case .noDevice: "Nessuna fotocamera disponibile."
+        case .denied: String(localized: "Camera access denied.")
+        case .noDevice: String(localized: "No camera available.")
         }
     }
 }

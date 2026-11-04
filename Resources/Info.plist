@@ -3,7 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>it</string>
+	<string>en</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>it</string>
+	</array>
 	<key>CFBundleExecutable</key>
 	<string>QRReader</string>
 	<key>CFBundleIdentifier</key>
@@ -27,10 +32,10 @@
 	<key>NSHighResolutionCapable</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>QR Reader usa la webcam per leggere i QR code.</string>
+	<string>QR Reader uses the webcam to read QR codes.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>macOS richiede il permesso Posizione per vedere i nomi delle reti Wi-Fi e connettersi a quella del QR code.</string>
+	<string>macOS requires the Location permission to see Wi-Fi network names and join the one in the QR code.</string>
 	<key>NSLocationUsageDescription</key>
-	<string>macOS richiede il permesso Posizione per vedere i nomi delle reti Wi-Fi e connettersi a quella del QR code.</string>
+	<string>macOS requires the Location permission to see Wi-Fi network names and join the one in the QR code.</string>
 </dict>
 </plist>

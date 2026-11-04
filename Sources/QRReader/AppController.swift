@@ -76,8 +76,8 @@ final class AppController {
         let repo = URL(string: "https://github.com/\(Updater.repo)")!
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
         let title = ["QR Reader", version].compactMap { $0 }.joined(separator: " ")
-        let info = "Lettore di QR code per la barra dei menu. Gratuito e open source.\n\n\(repo.host()!)\(repo.path())"
-        if Prompt.confirm(title, info: info, confirm: "Apri su GitHub", cancel: "Chiudi") {
+        let info = String(localized: "QR code reader for the menu bar. Free and open source.") + "\n\n\(repo.host()!)\(repo.path())"
+        if Prompt.confirm(title, info: info, confirm: String(localized: "Open on GitHub"), cancel: String(localized: "Close")) {
             NSWorkspace.shared.open(repo)
         }
     }
@@ -89,7 +89,7 @@ final class AppController {
             let image = try await ScreenCapturer.shared.capture(globalRect: rect)
             let raws = await Task.detached { QRDecoder.decode(cgImage: image) }.value
             if raws.isEmpty {
-                resultPanel.showMessage("Nessun QR trovato nell'area selezionata.")
+                resultPanel.showMessage(String(localized: "No QR code found in the selected area."))
             } else {
                 report(raws)
             }
@@ -114,14 +114,11 @@ final class AppController {
     private func showScreenCaptureError(_ error: Error) {
         viewfinder?.close()
         let alert = NSAlert()
-        alert.messageText = "Impossibile catturare lo schermo"
-        alert.informativeText = """
-        \(error.localizedDescription)
-
-        Concedi il permesso in Impostazioni di Sistema › Privacy e sicurezza › Registrazione schermo e audio, poi riavvia QR Reader.
-        """
-        alert.addButton(withTitle: "Apri Impostazioni")
-        alert.addButton(withTitle: "Annulla")
+        alert.messageText = String(localized: "Cannot capture the screen")
+        alert.informativeText = error.localizedDescription + "\n\n"
+            + String(localized: "Grant the permission in System Settings › Privacy & Security › Screen & System Audio Recording, then relaunch QR Reader.")
+        alert.addButton(withTitle: String(localized: "Open Settings"))
+        alert.addButton(withTitle: String(localized: "Cancel"))
         NSApp.activate()
         if alert.runModal() == .alertFirstButtonReturn {
             NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture")!)

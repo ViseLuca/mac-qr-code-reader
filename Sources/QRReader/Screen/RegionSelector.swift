@@ -83,7 +83,7 @@ private final class SelectionView: NSView {
             border.lineWidth = 1
             border.stroke()
         } else {
-            let hint = "Trascina per selezionare un QR · clic per tutto lo schermo · Esc per annullare" as NSString
+            let hint = String(localized: "Drag to select a QR code · click for the whole screen · Esc to cancel") as NSString
             let attrs: [NSAttributedString.Key: Any] = [
                 .font: NSFont.systemFont(ofSize: 15, weight: .medium),
                 .foregroundColor: NSColor.white,

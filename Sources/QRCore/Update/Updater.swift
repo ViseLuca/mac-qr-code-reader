@@ -48,7 +48,7 @@ public struct Updater: Sendable {
 
         if let expected = release.sha256 {
             let actual = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
-            guard actual == expected.lowercased() else { throw UpdateError("Download corrotto: checksum diverso") }
+            guard actual == expected.lowercased() else { throw UpdateError(String(localized: "Corrupted download: checksum mismatch")) }
         }
         let zip = staging.appendingPathComponent(Self.assetName)
         try data.write(to: zip)
@@ -57,14 +57,14 @@ public struct Updater: Sendable {
         guard let app = try files.contentsOfDirectory(at: staging, includingPropertiesForKeys: nil)
                   .first(where: { $0.pathExtension == "app" }),
               let downloaded = Bundle(url: app) else {
-            throw UpdateError("Lo zip della release non contiene l'app")
+            throw UpdateError(String(localized: "The release zip does not contain the app"))
         }
         guard downloaded.bundleIdentifier == bundleIdentifier else {
-            throw UpdateError("Lo zip della release contiene un'altra app: \(downloaded.bundleIdentifier ?? "?")")
+            throw UpdateError(String(localized: "The release zip contains another app: \(downloaded.bundleIdentifier ?? "?")"))
         }
         // An app that still reports an older version would be offered again on every check.
         guard let version = Self.version(of: downloaded), version == release.version else {
-            throw UpdateError("La release \(release.version) contiene l'app versione \(Self.version(of: downloaded)?.description ?? "?")")
+            throw UpdateError(String(localized: "Release \(release.version.description) contains app version \(Self.version(of: downloaded)?.description ?? "?")"))
         }
         try Self.run("/usr/bin/codesign", ["--verify", "--deep", "--strict", app.path])
         _ = try files.replaceItemAt(appURL, withItemAt: app)
@@ -77,7 +77,7 @@ public struct Updater: Sendable {
         let (data, response) = try await URLSession.shared.data(for: request)
         let status = (response as? HTTPURLResponse)?.statusCode ?? 0
         guard (200..<300).contains(status) else {
-            throw UpdateError(status == 404 ? "Nessuna release pubblicata su GitHub" : "GitHub ha risposto \(status)")
+            throw UpdateError(status == 404 ? String(localized: "No release published on GitHub") : String(localized: "GitHub responded \(status)"))
         }
         return data
     }
@@ -93,7 +93,7 @@ public struct Updater: Sendable {
         let output = String(decoding: pipe.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self)
         process.waitUntilExit()
         guard process.terminationStatus == 0 else {
-            throw UpdateError("\((tool as NSString).lastPathComponent) non riuscito: \(output.trimmingCharacters(in: .whitespacesAndNewlines))")
+            throw UpdateError(String(localized: "\((tool as NSString).lastPathComponent) failed: \(output.trimmingCharacters(in: .whitespacesAndNewlines))"))
         }
     }
 
