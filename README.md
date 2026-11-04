@@ -1,106 +1,108 @@
 # mac-qr-code-reader
 
-Lettore di QR code per macOS, nella barra dei menu. Nativo (Swift, Vision, ScreenCaptureKit, AVFoundation, CoreWLAN), nessuna dipendenza.
+QR code reader for the macOS menu bar. Native (Swift, Vision, ScreenCaptureKit, AVFoundation, CoreWLAN), no dependencies.
 
-## Modalità
+The app's interface is in Italian: menu labels are quoted below as they appear, with a translation.
 
-| Modalità | Scorciatoia | Cosa fa |
+## Modes
+
+| Mode | Shortcut | What it does |
 |---|---|---|
-| **Mirino sullo schermo** | ⌥⇧Q | Riquadro flottante che scansiona in continuo ciò che c'è sotto. Trascina il bordo per spostarlo, un angolo per ridimensionarlo, ✕ per chiuderlo. L'interno lascia passare i clic. |
-| **Seleziona area** | ⌥⇧A | Trascina un rettangolo come con ⌘⇧4. Un clic senza trascinare scansiona tutto lo schermo, Esc annulla. |
-| **Webcam** | ⌥⇧C | Finestra con anteprima live. Chiudila per spegnere la fotocamera. |
+| **Screen viewfinder** (*Mirino sullo schermo*) | ⌥⇧Q | Floating frame that keeps scanning whatever is under it. Drag the border to move it, a corner to resize it, ✕ to close it. Clicks pass through the inside. |
+| **Select area** (*Seleziona area*) | ⌥⇧A | Drag a rectangle as with ⌘⇧4. A click without dragging scans the whole screen, Esc cancels. |
+| **Webcam** | ⌥⇧C | Window with a live preview. Close it to turn the camera off. |
 
-Le scorciatoie si cambiano da **Scorciatoie…** nel menu: clicca quella da cambiare e premi la nuova combinazione (serve almeno ⌘, ⌥ o ⌃; F1–F12 anche da soli). ⌫ la toglie, la freccia la riporta al valore predefinito. Se un'altra app usa già la stessa combinazione, macOS la rifiuta: la finestra lo segnala e la voce di menu diventa **⚠️ Scorciatoie…**.
+Shortcuts can be changed from **Scorciatoie…** (Shortcuts…) in the menu: click the one to change and press the new combination (it needs at least ⌘, ⌥ or ⌃; F1–F12 also work on their own). ⌫ removes it, the arrow resets it to the default. If another app already uses the same combination, macOS refuses it: the window says so and the menu item becomes **⚠️ Scorciatoie…**.
 
-Il risultato compare in un pannello flottante con azioni in base al contenuto:
-- **Wi-Fi** (`WIFI:T:WPA;S:…;P:…;;`): Connetti, Copia password
-- **Link**: Apri, Copia
-- **vCard**: Aggiungi ai Contatti
-- **Testo**: Copia
+The result appears in a floating panel with actions based on the content:
+- **Wi-Fi** (`WIFI:T:WPA;S:…;P:…;;`): Connect, Copy password
+- **Link**: Open, Copy
+- **vCard**: Add to Contacts
+- **Text**: Copy
 
-Le ultime 20 scansioni sono nel menu *Cronologia* (salvate in chiaro in UserDefaults, password Wi-Fi comprese).
+The last 20 scans are in the *Cronologia* (History) menu, stored in plain text in UserDefaults, Wi-Fi passwords included.
 
-## Installazione
+## Installation
 
-### Con il Terminale (consigliato)
+### With Terminal (recommended)
 
-Apri **Terminale** (Spotlight ⌘Spazio › "Terminale"), incolla questa riga e premi Invio:
+Open **Terminal** (Spotlight ⌘Space › "Terminal"), paste this line and press Return:
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/ViseLuca/mac-qr-code-reader/main/scripts/install.sh | bash
 ```
 
-Scarica l'ultima versione, la verifica, la installa in `Applicazioni` e la apre. Nessun avviso di macOS: i file scaricati con `curl` non vengono bloccati da Gatekeeper come quelli scaricati dal browser. Rilanciala quando vuoi per reinstallare.
+It downloads the latest version, verifies it, installs it in `Applications` and opens it. No macOS warning: files downloaded with `curl` are not blocked by Gatekeeper the way browser downloads are. Run it again any time to reinstall.
 
-### Dal browser
+### From the browser
 
-1. Scarica **[QRReader.zip](https://github.com/ViseLuca/mac-qr-code-reader/releases/latest/download/QRReader.zip)** dall'[ultima release](https://github.com/ViseLuca/mac-qr-code-reader/releases/latest).
-2. Estrai lo zip e sposta `QR Reader.app` in `Applicazioni`.
-3. L'app è gratuita e non è notarizzata da Apple, quindi al primo avvio macOS la blocca. Sbloccala una volta: prova ad aprirla, chiudi l'avviso, poi vai in *Impostazioni di Sistema › Privacy e sicurezza*, scorri in fondo e premi **Apri comunque**.
+1. Download **[QRReader.zip](https://github.com/ViseLuca/mac-qr-code-reader/releases/latest/download/QRReader.zip)** from the [latest release](https://github.com/ViseLuca/mac-qr-code-reader/releases/latest).
+2. Unzip it and move `QR Reader.app` to `Applications`.
+3. The app is free and not notarized by Apple, so macOS blocks it on first launch. Unblock it once: try to open it, dismiss the warning, then go to *System Settings › Privacy & Security*, scroll to the bottom and click **Open Anyway**.
 
-Per averla sempre a portata: *Impostazioni › Generali › Elementi login* › aggiungi QR Reader.
+To always have it at hand: *System Settings › General › Login Items* › add QR Reader.
 
-### Dai sorgenti
+### From source
 
-Servono macOS 14+ e i Command Line Tools (`xcode-select --install`), Xcode non serve.
+Requires macOS 14+ and the Command Line Tools (`xcode-select --install`); Xcode is not needed.
 
 ```sh
 scripts/build-app.sh install
 ```
 
-| Comando | Cosa fa |
+| Command | What it does |
 |---|---|
-| `scripts/build-app.sh` | Build universale (Apple Silicon + Intel) in `build/QR Reader.app` |
-| `scripts/build-app.sh install` | Build, copia in `/Applications` e riavvia |
-| `scripts/build-app.sh dist 0.2.0` | Build della versione 0.2.0 firmata con `QRReader Dev` e zip in `build/QRReader.zip` per una release |
-| `scripts/build-app.sh icon` | Ridisegna `Resources/AppIcon.icns` da `scripts/make-icon.swift` |
-| `scripts/test.sh` | Test unitari (parser, decoder, aggiornamenti) |
+| `scripts/build-app.sh` | Universal build (Apple Silicon + Intel) in `build/QR Reader.app` |
+| `scripts/build-app.sh install` | Build, copy to `/Applications` and relaunch |
+| `scripts/build-app.sh dist 0.2.0` | Build version 0.2.0 signed with `QRReader Dev` and zip it into `build/QRReader.zip` for a release |
+| `scripts/build-app.sh icon` | Redraw `Resources/AppIcon.icns` from `scripts/make-icon.swift` |
+| `scripts/test.sh` | Unit tests (parser, decoder, updates) |
 
-> Usa sempre il `.app` e non `swift run`: senza Info.plist macOS chiude l'app appena accede alla fotocamera.
+> Always use the `.app`, not `swift run`: without an Info.plist macOS kills the app as soon as it accesses the camera.
 
-## Aggiornamenti
+## Updates
 
-All'avvio e ogni 6 ore QR Reader controlla l'[ultima release](https://github.com/ViseLuca/mac-qr-code-reader/releases/latest) su GitHub. Se è più recente della versione installata, propone di installarla: scarica `QRReader.zip`, lo verifica con lo SHA-256 pubblicato da GitHub, controlla che contenga QR Reader alla versione della release con una firma valida, sostituisce l'app e la riavvia. Se l'app è in una cartella in cui non può scrivere, apre la pagina della release.
+At launch and every 6 hours QR Reader checks the [latest release](https://github.com/ViseLuca/mac-qr-code-reader/releases/latest) on GitHub. If it is newer than the installed version, it offers to install it: it downloads `QRReader.zip`, verifies it against the SHA-256 published by GitHub, checks that it contains QR Reader at the release's version with a valid signature, replaces the app and relaunches it. If the app is in a folder it cannot write to, it opens the release page instead.
 
-Dal menu: **Controlla aggiornamenti…**, che diventa **⬆️ Aggiorna alla x.y.z** quando ce n'è una.
+From the menu: **Controlla aggiornamenti…** (Check for updates…), which becomes **⬆️ Aggiorna alla x.y.z** (Update to x.y.z) when one is available.
 
-### Pubblicare una release
+### Publishing a release
 
 ```sh
 scripts/build-app.sh dist 0.2.0
 gh release create 0.2.0 build/QRReader.zip
 ```
 
-L'asset deve chiamarsi `QRReader.zip`. Le build locali (`scripts/build-app.sh`, `install`) prendono la versione dall'ultimo tag git.
+The asset must be named `QRReader.zip`. Local builds (`scripts/build-app.sh`, `install`) take their version from the latest git tag.
 
-`dist` firma con il certificato self-signed `QRReader Dev` (un altro con `CODESIGN_IDENTITY="…"`) e rifiuta la firma ad-hoc: con una firma sempre uguale macOS riconosce ogni versione come la stessa app e gli utenti non devono riconcedere i permessi a ogni aggiornamento.
+`dist` signs with the self-signed `QRReader Dev` certificate (another one with `CODESIGN_IDENTITY="…"`) and refuses ad-hoc signing: with an unchanging signature macOS recognizes every version as the same app, so users don't have to grant permissions again after each update.
 
-#### Certificato di firma (una volta sola)
+#### Signing certificate (one time only)
 
-1. *Accesso Portachiavi › Assistente Certificato › Crea un certificato…*
-2. Nome `QRReader Dev`, tipo identità *Radice autofirmata*, tipo certificato *Firma del codice*, spunta **Lascia che sia io a sovrascrivere i valori predefiniti**.
-3. *Periodo di validità*: `3650` giorni (il predefinito è un anno, poi `codesign` smette di firmare). Conferma il resto con Continua.
-4. Fai un backup: in Accesso Portachiavi, *I miei certificati* › tasto destro su `QRReader Dev` › **Esporta** in `.p12`, con una password, in un posto sicuro (es. 1Password). Se il certificato va perso, con uno nuovo gli utenti dovranno riconcedere i permessi una volta.
+1. *Keychain Access › Certificate Assistant › Create a Certificate…*
+2. Name `QRReader Dev`, Identity Type *Self-Signed Root*, Certificate Type *Code Signing*, check **Let me override defaults**.
+3. *Validity Period*: `3650` days (the default is one year, after which `codesign` stops signing). Accept the rest with Continue.
+4. Back it up: in Keychain Access, *My Certificates* › right-click `QRReader Dev` › **Export** as `.p12`, with a password, somewhere safe (e.g. 1Password). Export from *My Certificates*, not *Keys*: the backup must hold the certificate together with its private key (the disclosure arrow next to `QRReader Dev` shows it), as the private key is what signs. Check it with `openssl pkcs12 -in QRReader-Dev.p12 -info -noout` (add `-legacy` if OpenSSL rejects the algorithm): it must list both a certificate bag and a shrouded keybag. Keep the `.p12` secret and out of the repo: whoever has it can sign apps that macOS treats as QR Reader. If the certificate is lost, with a new one users will have to grant permissions again once.
 
-Per controllare: `codesign -d -r- "build/QR Reader.app"` deve mostrare `certificate leaf = H"…"`, non `cdhash`.
+To check: `codesign -d -r- "build/QR Reader.app"` must show `certificate leaf = H"…"`, not `cdhash`.
 
-## Permessi
+## Permissions
 
-| Permesso | Serve per | Quando viene chiesto |
+| Permission | Needed for | When it is requested |
 |---|---|---|
-| Registrazione schermo | Mirino, Seleziona area | Primo utilizzo. Dopo averlo concesso **riavvia l'app**. |
-| Fotocamera | Webcam | Primo utilizzo |
-| Posizione | Connessione Wi-Fi (macOS nasconde gli SSID senza questo permesso) | Primo "Connetti". Se lo neghi, l'app usa `networksetup` come alternativa. |
+| Screen Recording | Viewfinder, Select area | First use. After granting it, **relaunch the app**. |
+| Camera | Webcam | First use |
+| Location | Wi-Fi connection (macOS hides SSIDs without this permission) | First "Connect". If denied, the app falls back to `networksetup`. |
 
-### Permessi richiesti di nuovo a ogni build locale
+### Permissions requested again on every local build
 
-Le build locali sono firmate ad-hoc, quindi macOS considera ogni build un'app diversa. Per evitarlo usa il [certificato di firma](#certificato-di-firma-una-volta-sola): `CODESIGN_IDENTITY="QRReader Dev" scripts/build-app.sh install`.
+Local builds are signed ad-hoc, so macOS treats each build as a different app. To avoid this, use the [signing certificate](#signing-certificate-one-time-only): `CODESIGN_IDENTITY="QRReader Dev" scripts/build-app.sh install`.
 
-## Struttura
+## Structure
 
 ```
-Sources/QRCore/      decoder (Vision), parser dei contenuti, auto-update (Update/). Niente AppKit
-Sources/QRReader/    app: menu bar, mirino, selezione area, webcam, Wi-Fi, scorciatoie (Shortcuts/), aggiornamenti
+Sources/QRCore/      decoder (Vision), content parser, auto-update (Update/). No AppKit
+Sources/QRReader/    app: menu bar, viewfinder, area selection, webcam, Wi-Fi, shortcuts (Shortcuts/), updates
 Tests/QRCoreTests/   swift-testing
-scripts/             build del .app, icona, test
+scripts/             .app build, icon, tests
 ```
